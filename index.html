@@ -1,0 +1,701 @@
+<!DOCTYPE html>
+<html lang="id" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bank 30 Soal Interaktif Limit Fungsi - Ujian Sekolah</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        brand: {
+                            50: '#f0f7ff',
+                            100: '#e0effe',
+                            500: '#2563eb',
+                            600: '#1d4ed8',
+                            700: '#1e40af',
+                            800: '#1e3a8a',
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <!-- KaTeX for math rendering -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.css">
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.js"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/contrib/auto-render.min.js"></script>
+    <!-- Font Awesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap');
+        body { font-family: 'Inter', sans-serif; }
+        .katex-display { margin: 0.4em 0; overflow-x: auto; overflow-y: hidden; }
+    </style>
+</head>
+<body class="bg-slate-50 dark:bg-slate-900 text-slate-800 dark:text-slate-100 min-h-screen flex flex-col transition-colors duration-200">
+
+    <!-- Header Navbar -->
+    <header class="sticky top-0 z-50 bg-white/90 dark:bg-slate-900/90 backdrop-blur border-b border-slate-200 dark:border-slate-800 shadow-sm">
+        <div class="max-w-6xl mx-auto px-4 h-16 flex items-center justify-between">
+            <div class="flex items-center space-x-3">
+                <div class="bg-brand-600 text-white p-2.5 rounded-xl flex items-center justify-center shadow-md">
+                    <i class="fa-solid fa-file-pen text-lg"></i>
+                </div>
+                <div>
+                    <h1 class="font-bold text-base sm:text-lg tracking-tight text-slate-900 dark:text-white">Latihan 30 Soal Limit Fungsi</h1>
+                    <p class="text-xs text-slate-500 dark:text-slate-400">Persiapan Ujian Sekolah / SNBT</p>
+                </div>
+            </div>
+
+            <div class="flex items-center space-x-3">
+                <button onclick="toggleDarkMode()" class="p-2 text-slate-500 hover:text-slate-700 dark:text-slate-400 dark:hover:text-slate-200 rounded-full hover:bg-slate-100 dark:hover:bg-slate-800 transition" title="Ganti Mode Gelap/Terang">
+                    <i id="themeIcon" class="fa-solid fa-moon text-lg"></i>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Container -->
+    <main class="max-w-6xl mx-auto px-4 py-6 flex-grow space-y-6 w-full">
+
+        <!-- Scoreboard Card -->
+        <div class="bg-gradient-to-r from-slate-900 via-brand-900 to-indigo-900 text-white rounded-2xl p-5 shadow-lg border border-slate-800 flex flex-col sm:flex-row items-center justify-between gap-4">
+            <div class="space-y-1 text-center sm:text-left">
+                <span class="text-xs font-semibold uppercase tracking-wider text-brand-300">Statistik Latihan Anda</span>
+                <h2 class="text-xl sm:text-2xl font-extrabold" id="scoreOverview">0 dari 30 Soal Dijawab</h2>
+                <p class="text-xs text-slate-300">Pilih opsi jawaban di setiap soal untuk mengecek kebenaran & pembahasannya.</p>
+            </div>
+            
+            <div class="flex items-center space-x-4 bg-white/10 backdrop-blur px-4 py-3 rounded-xl border border-white/10">
+                <div class="text-center">
+                    <span class="text-xs text-emerald-300 font-medium block">Benar</span>
+                    <span id="statCorrect" class="text-xl font-bold text-emerald-400">0</span>
+                </div>
+                <div class="w-px h-8 bg-white/20"></div>
+                <div class="text-center">
+                    <span class="text-xs text-rose-300 font-medium block">Salah</span>
+                    <span id="statWrong" class="text-xl font-bold text-rose-400">0</span>
+                </div>
+                <div class="w-px h-8 bg-white/20"></div>
+                <div class="text-center">
+                    <span class="text-xs text-amber-300 font-medium block">Akurasi</span>
+                    <span id="statAccuracy" class="text-xl font-bold text-amber-300">0%</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Filter Tabs -->
+        <div class="flex items-center justify-between border-b border-slate-200 dark:border-slate-800 pb-3 flex-wrap gap-2">
+            <div class="flex flex-wrap gap-2" id="filterButtons">
+                <button onclick="filterCategory('all')" id="filter-all" class="filter-btn bg-brand-600 text-white px-3.5 py-1.5 rounded-lg text-xs font-bold transition shadow-sm">
+                    Semua Soal (30)
+                </button>
+                <button onclick="filterCategory('aljabar')" id="filter-aljabar" class="filter-btn bg-slate-200 dark:bg-slate-800 text-slate-700 dark:text-slate-300 px-3.5 py-1.5 rounded-lg text-xs font-bold transition">
+                    Limit Aljabar (10)
+                </button>
+                <button onclick="filterCategory('tak-hingga')" id="filter-tak-hingga" class="filter-btn bg-slate-200 dark:bg-slate-800 text-slate-700 dark:text-slate-300 px-3.5 py-1.5 rounded-lg text-xs font-bold transition">
+                    Limit Tak Hingga (10)
+                </button>
+                <button onclick="filterCategory('trigonometri')" id="filter-trigonometri" class="filter-btn bg-slate-200 dark:bg-slate-800 text-slate-700 dark:text-slate-300 px-3.5 py-1.5 rounded-lg text-xs font-bold transition">
+                    Limit Trigonometri (10)
+                </button>
+            </div>
+            <button onclick="resetQuiz()" class="text-xs font-semibold text-rose-600 dark:text-rose-400 hover:underline flex items-center space-x-1">
+                <i class="fa-solid fa-rotate-right"></i>
+                <span>Reset Jawaban</span>
+            </button>
+        </div>
+
+        <!-- Questions Container -->
+        <div id="quizContainer" class="space-y-6">
+            <!-- Questions rendered via JS -->
+        </div>
+
+    </main>
+
+    <!-- Footer -->
+    <footer class="mt-auto border-t border-slate-200 dark:border-slate-800 py-6 bg-white dark:bg-slate-900 text-center text-xs text-slate-500">
+        <p>30 Soal Latihan Interaktif Limit Fungsi &bull; Kurikulum SMA XII / Persiapan Ujian Sekolah</p>
+    </footer>
+
+    <!-- Script Data & Logic -->
+    <script>
+        // Data 30 Soal Latihan Limit Fungsi
+        const quizData = [
+            // --- LIMIT ALJABAR (10 SOAL) ---
+            {
+                id: 1,
+                category: "aljabar",
+                categoryLabel: "Limit Aljabar - Pemfaktoran",
+                question: "Hitunglah nilai limit berikut:\n$$\\lim_{x \\to 3} \\frac{x^2 - 9}{x^2 - x - 6}$$",
+                options: [
+                    { text: "$\\frac{6}{5}$", isCorrect: true },
+                    { text: "$\\frac{3}{5}$", isCorrect: false },
+                    { text: "$1$", isCorrect: false },
+                    { text: "$\\frac{5}{6}$", isCorrect: false }
+                ],
+                explanation: "1. Substitusi langsung $x = 3$ menghasilkan bentuk tak tentu $\\frac{0}{0}$.\n2. Faktorkan pembilang dan penyebut:\n$$\\lim_{x \\to 3} \\frac{(x - 3)(x + 3)}{(x - 3)(x + 2)}$$\n3. Eliminasi pembuat nol $(x - 3)$:\n$$= \\lim_{x \\to 3} \\frac{x + 3}{x + 2} = \\frac{3 + 3}{3 + 2} = \\frac{6}{5}$$"
+            },
+            {
+                id: 2,
+                category: "aljabar",
+                categoryLabel: "Limit Aljabar - Selisih Kubik",
+                question: "Hitunglah nilai limit berikut:\n$$\\lim_{x \\to 2} \\frac{x^3 - 8}{x^2 - 4}$$",
+                options: [
+                    { text: "$2$", isCorrect: false },
+                    { text: "$3$", isCorrect: true },
+                    { text: "$4$", isCorrect: false },
+                    { text: "$6$", isCorrect: false }
+                ],
+                explanation: "1. Menggunakan identitas selisih kubik $a^3 - b^3 = (a-b)(a^2+ab+b^2)$:\n$$x^3 - 8 = (x - 2)(x^2 + 2x + 4)$$\n2. Penyebut difaktorkan menjadi $(x - 2)(x + 2)$.\n3. Eliminasi $(x - 2)$:\n$$\\lim_{x \\to 2} \\frac{x^2 + 2x + 4}{x + 2} = \\frac{2^2 + 2(2) + 4}{2 + 2} = \\frac{12}{4} = 3$$"
+            },
+            {
+                id: 3,
+                category: "aljabar",
+                categoryLabel: "Limit Aljabar - Perkalian Sekawan",
+                question: "Hitunglah nilai limit berikut:\n$$\\lim_{x \\to 1} \\frac{\\sqrt{x+3} - 2}{x - 1}$$",
+                options: [
+                    { text: "$\\frac{1}{4}$", isCorrect: true },
+                    { text: "$\\frac{1}{2}$", isCorrect: false },
+                    { text: "$\\frac{1}{8}$", isCorrect: false },
+                    { text: "$1$", isCorrect: false }
+                ],
+                explanation: "1. Kalikan pembilang dan penyebut dengan sekawan $(\\sqrt{x+3} + 2)$:\n$$\\lim_{x \\to 1} \\frac{(\\sqrt{x+3}-2)(\\sqrt{x+3}+2)}{(x-1)(\\sqrt{x+3}+2)} = \\lim_{x \\to 1} \\frac{(x+3)-4}{(x-1)(\\sqrt{x+3}+2)}$$\n2. Sederhanakan pembilang menjadi $(x-1)$ lalu coret dengan penyebut:\n$$= \\lim_{x \\to 1} \\frac{1}{\\sqrt{x+3}+2} = \\frac{1}{\\sqrt{1+3}+2} = \\frac{1}{2+2} = \\frac{1}{4}$$"
+            },
+            {
+                id: 4,
+                category: "aljabar",
+                categoryLabel: "Limit Aljabar - Sekawan Akar Dua Suku",
+                question: "Hitunglah nilai limit berikut:\n$$\\lim_{x \\to 0} \\frac{x}{\\sqrt{4+x} - \\sqrt{4-x}}$$ ",
+                options: [
+                    { text: "$1$", isCorrect: false },
+                    { text: "$2$", isCorrect: true },
+                    { text: "$4$", isCorrect: false },
+                    { text: "$\\frac{1}{2}$", isCorrect: false }
+                ],
+                explanation: "1. Kalikan dengan sekawan penyebut $(\\sqrt{4+x} + \\sqrt{4-x})$:\n$$\\lim_{x \\to 0} \\frac{x(\\sqrt{4+x} + \\sqrt{4-x})}{(4+x) - (4-x)} = \\lim_{x \\to 0} \\frac{x(\\sqrt{4+x} + \\sqrt{4-x})}{2x}$$\n2. Coret $x$ pada pembilang dan penyebut:\n$$= \\lim_{x \\to 0} \\frac{\\sqrt{4+x} + \\sqrt{4-x}}{2} = \\frac{\\sqrt{4} + \\sqrt{4}}{2} = \\frac{2+2}{2} = 2$$"
+            },
+            {
+                id: 5,
+                category: "aljabar",
+                categoryLabel: "Limit Aljabar - Menentukan Konstanta",
+                question: "Diketahui nilai $\\lim_{x \\to 2} \\frac{x^2 + ax + b}{x - 2} = 5$. Berapakah nilai dari $a + b$?",
+                options: [
+                    { text: "$-5$", isCorrect: true },
+                    { text: "$-3$", isCorrect: false },
+                    { text: "$1$", isCorrect: false },
+                    { text: "$5$", isCorrect: false }
+                ],
+                explanation: "1. Karena penyebut $x - 2 \\to 0$ saat $x \\to 2$, maka pembilang juga harus $0$ saat $x = 2$ agar limit bernilai terhingga:\n$$2^2 + a(2) + b = 0 \\implies 4 + 2a + b = 0 \\implies b = -2a - 4$$\n2. Gunakan Aturan L'Hôpital (turunkan pembilang & penyebut terhadap $x$):\n$$\\lim_{x \\to 2} \\frac{2x + a}{1} = 5 \\implies 2(2) + a = 5 \\implies a = 1$$\n3. Substitusi $a = 1$ untuk mendapatkan $b$:\n$$b = -2(1) - 4 = -6$$\n4. Sehingga $a + b = 1 + (-6) = -5$."
+            },
+            {
+                id: 6,
+                category: "aljabar",
+                categoryLabel: "Limit Aljabar - Pemfaktoran Kuadrat",
+                question: "Hitunglah nilai limit berikut:\n$$\\lim_{x \\to -2} \\frac{2x^2 + 3x - 2}{x^2 - 4}$$",
+                options: [
+                    { text: "$\\frac{5}{4}$", isCorrect: true },
+                    { text: "$-\\frac{5}{4}$", isCorrect: false },
+                    { text: "$\\frac{3}{4}$", isCorrect: false },
+                    { text: "$\\frac{1}{2}$", isCorrect: false }
+                ],
+                explanation: "1. Faktorkan pembilang $2x^2 + 3x - 2 = (2x - 1)(x + 2)$.\n2. Faktorkan penyebut $x^2 - 4 = (x - 2)(x + 2)$.\n3. Eliminasi pembuat nol $(x + 2)$:\n$$\\lim_{x \\to -2} \\frac{2x - 1}{x - 2} = \\frac{2(-2) - 1}{-2 - 2} = \\frac{-5}{-4} = \\frac{5}{4}$$"
+            },
+            {
+                id: 7,
+                category: "aljabar",
+                categoryLabel: "Limit Aljabar - Sekawan Tanda Negatif",
+                question: "Hitunglah nilai limit berikut:\n$$\\lim_{x \\to 4} \\frac{3 - \\sqrt{2x + 1}}{x - 4}$$",
+                options: [
+                    { text: "$-\\frac{1}{3}$", isCorrect: true },
+                    { text: "$\\frac{1}{3}$", isCorrect: false },
+                    { text: "$-\\frac{1}{6}$", isCorrect: false },
+                    { text: "$-\\frac{2}{3}$", isCorrect: false }
+                ],
+                explanation: "1. Kalikan dengan sekawan $(3 + \\sqrt{2x+1})$:\n$$\\lim_{x \\to 4} \\frac{9 - (2x+1)}{(x-4)(3+\\sqrt{2x+1})} = \\lim_{x \\to 4} \\frac{8 - 2x}{(x-4)(3+\\sqrt{2x+1})}$$\n2. Faktorkan pembilang: $8 - 2x = -2(x - 4)$.\n3. Eliminasi $(x - 4)$:\n$$= \\lim_{x \\to 4} \\frac{-2}{3 + \\sqrt{2x+1}} = \\frac{-2}{3 + \\sqrt{9}} = \\frac{-2}{3+3} = -\\frac{1}{3}$$"
+            },
+            {
+                id: 8,
+                category: "aljabar",
+                categoryLabel: "Limit Aljabar - Operasi Pecahan Bertingkat",
+                question: "Hitunglah nilai limit berikut:\n$$\\lim_{x \\to 1} \\left( \\frac{1}{1 - x} - \\frac{3}{1 - x^3} \\right)$$",
+                options: [
+                    { text: "$-1$", isCorrect: true },
+                    { text: "$0$", isCorrect: false },
+                    { text: "$1$", isCorrect: false },
+                    { text: "$-3$", isCorrect: false }
+                ],
+                explanation: "1. Ingat $1 - x^3 = (1-x)(1+x+x^2)$. Samakan penyebut:\n$$\\frac{1+x+x^2 - 3}{(1-x)(1+x+x^2)} = \\frac{x^2+x-2}{(1-x)(1+x+x^2)}$$\n2. Faktorkan pembilang $x^2+x-2 = (x+2)(x-1) = -(x+2)(1-x)$.\n3. Coret $(1-x)$:\n$$\\lim_{x \\to 1} \\frac{-(x+2)}{1+x+x^2} = \\frac{-(1+2)}{1+1+1} = \\frac{-3}{3} = -1$$"
+            },
+            {
+                id: 9,
+                category: "aljabar",
+                categoryLabel: "Limit Aljabar - Kombinasi Sekawan & Pemfaktoran",
+                question: "Hitunglah nilai limit berikut:\n$$\\lim_{x \\to 2} \\frac{\\sqrt{x^2+5} - 3}{x^2 - 2x}$$",
+                options: [
+                    { text: "$\\frac{1}{3}$", isCorrect: true },
+                    { text: "$\\frac{2}{3}$", isCorrect: false },
+                    { text: "$\\frac{1}{6}$", isCorrect: false },
+                    { text: "$\\frac{1}{2}$", isCorrect: false }
+                ],
+                explanation: "1. Kalikan sekawan pembilang $(\\sqrt{x^2+5} + 3)$:\n$$\\lim_{x \\to 2} \\frac{(x^2+5) - 9}{x(x-2)(\\sqrt{x^2+5}+3)} = \\lim_{x \\to 2} \\frac{x^2 - 4}{x(x-2)(\\sqrt{x^2+5}+3)}$$\n2. Faktorkan $x^2 - 4 = (x-2)(x+2)$ lalu coret $(x-2)$:\n$$= \\lim_{x \\to 2} \\frac{x + 2}{x(\\sqrt{x^2+5}+3)} = \\frac{2 + 2}{2(\\sqrt{9}+3)} = \\frac{4}{2(6)} = \\frac{1}{3}$$"
+            },
+            {
+                id: 10,
+                category: "aljabar",
+                categoryLabel: "Limit Aljabar - Sekawan Bentuk Nol",
+                question: "Hitunglah nilai limit berikut:\n$$\\lim_{x \\to 0} \\frac{\\sqrt{1+x+x^2} - 1}{x}$$",
+                options: [
+                    { text: "$\\frac{1}{2}$", isCorrect: true },
+                    { text: "$1$", isCorrect: false },
+                    { text: "$0$", isCorrect: false },
+                    { text: "$2$", isCorrect: false }
+                ],
+                explanation: "1. Kalikan dengan sekawan $(\\sqrt{1+x+x^2} + 1)$:\n$$\\lim_{x \\to 0} \\frac{(1+x+x^2)-1}{x(\\sqrt{1+x+x^2}+1)} = \\lim_{x \\to 0} \\frac{x+x^2}{x(\\sqrt{1+x+x^2}+1)}$$\n2. Bagi pembilang dengan $x$:\n$$= \\lim_{x \\to 0} \\frac{1+x}{\\sqrt{1+x+x^2}+1} = \\frac{1+0}{\\sqrt{1}+1} = \\frac{1}{2}$$"
+            },
+
+            // --- LIMIT TAK HINGGA (10 SOAL) ---
+            {
+                id: 11,
+                category: "tak-hingga",
+                categoryLabel: "Limit Tak Hingga - Rasio Polinomial",
+                question: "Hitunglah nilai limit berikut:\n$$\\lim_{x \\to \\infty} \\frac{4x^3 - 2x^2 + 5}{2x^3 + 7x - 1}$$",
+                options: [
+                    { text: "$2$", isCorrect: true },
+                    { text: "$0$", isCorrect: false },
+                    { text: "$\\infty$", isCorrect: false },
+                    { text: "$4$", isCorrect: false }
+                ],
+                explanation: "1. Derajat tertinggi pembilang ($n=3$) sama dengan penyebut ($m=3$).\n2. Nilai limit sama dengan rasio koefisien pangkat tertinggi:\n$$L = \\frac{a_n}{b_m} = \\frac{4}{2} = 2$$"
+            },
+            {
+                id: 12,
+                category: "tak-hingga",
+                categoryLabel: "Limit Tak Hingga - Bentuk Perkalian Pangkat",
+                question: "Hitunglah nilai limit berikut:\n$$\\lim_{x \\to \\infty} \\frac{(3x - 2)^2}{(2x + 1)(x - 4)}$$",
+                options: [
+                    { text: "$\\frac{9}{2}$", isCorrect: true },
+                    { text: "$\\frac{3}{2}$", isCorrect: false },
+                    { text: "$9$", isCorrect: false },
+                    { text: "$3$", isCorrect: false }
+                ],
+                explanation: "1. Cari koefisien pangkat tertinggi ($x^2$) dari pembilang dan penyebut:\n- Pembilang: $(3x - 2)^2 = 9x^2 - 12x + 4 \\implies \\text{koefisien } x^2 = 9$\n- Penyebut: $(2x + 1)(x - 4) = 2x^2 - 7x - 4 \\implies \\text{koefisien } x^2 = 2$\n2. Karena derajat sama ($x^2$), nilai limit adalah $\\frac{9}{2}$."
+            },
+            {
+                id: 13,
+                category: "tak-hingga",
+                categoryLabel: "Limit Tak Hingga - Selisih Akar Linier",
+                question: "Hitunglah nilai limit berikut:\n$$\\lim_{x \\to \\infty} \\left( \\sqrt{9x^2 + 6x - 1} - 3x \\right)$$",
+                options: [
+                    { text: "$1$", isCorrect: true },
+                    { text: "$0$", isCorrect: false },
+                    { text: "$3$", isCorrect: false },
+                    { text: "$2$", isCorrect: false }
+                ],
+                explanation: "1. Ubah $3x$ menjadi bentuk akar kuadrat $\\sqrt{9x^2}$.\n2. Gunakan rumus kilat $\\lim_{x \\to \\infty} (\\sqrt{ax^2+bx+c} - \\sqrt{px^2+qx+r}) = \\frac{b-q}{2\\sqrt{a}}$ saat $a=p$:\n- $a=9, b=6, c=-1$\n- $p=9, q=0, r=0$\n$$L = \\frac{6 - 0}{2\\sqrt{9}} = \\frac{6}{2(3)} = \\frac{6}{6} = 1$$"
+            },
+            {
+                id: 14,
+                category: "tak-hingga",
+                categoryLabel: "Limit Tak Hingga - Selisih Akar Dengan Linear",
+                question: "Hitunglah nilai limit berikut:\n$$\\lim_{x \\to \\infty} \\left( \\sqrt{4x^2 - 4x + 3} - (2x + 1) \\right)$$",
+                options: [
+                    { text: "$-2$", isCorrect: true },
+                    { text: "$-1$", isCorrect: false },
+                    { text: "$0$", isCorrect: false },
+                    { text: "$2$", isCorrect: false }
+                ],
+                explanation: "1. Ubah $(2x + 1)$ menjadi bentuk akar kuadrat:\n$$(2x + 1) = \\sqrt{(2x + 1)^2} = \\sqrt{4x^2 + 4x + 1}$$\n2. Terapkan rumus kilat $\\frac{b - q}{2\\sqrt{a}}$:\n- $a=4, b=-4, q=4$\n$$L = \\frac{-4 - 4}{2\\sqrt{4}} = \\frac{-8}{2(2)} = \\frac{-8}{4} = -2$$"
+            },
+            {
+                id: 15,
+                category: "tak-hingga",
+                categoryLabel: "Limit Tak Hingga - Selisih Dua Akar Kuadrat",
+                question: "Hitunglah nilai limit berikut:\n$$\\lim_{x \\to \\infty} \\left( \\sqrt{x^2 + 5x + 2} - \\sqrt{x^2 - 3x + 1} \\right)$$",
+                options: [
+                    { text: "$4$", isCorrect: true },
+                    { text: "$2$", isCorrect: false },
+                    { text: "$8$", isCorrect: false },
+                    { text: "$1$", isCorrect: false }
+                ],
+                explanation: "1. Karena $a = p = 1$, gunakan rumus kilat $\\frac{b - q}{2\\sqrt{a}}$:\n- $b = 5, q = -3, a = 1$\n$$L = \\frac{5 - (-3)}{2\\sqrt{1}} = \\frac{8}{2} = 4$$"
+            },
+            {
+                id: 16,
+                category: "tak-hingga",
+                categoryLabel: "Limit Tak Hingga - Akar Dalam Pecahan",
+                question: "Hitunglah nilai limit berikut:\n$$\\lim_{x \\to \\infty} \\frac{\\sqrt{16x^2 + 5x} - 2x}{2x + 1}$$",
+                options: [
+                    { text: "$1$", isCorrect: true },
+                    { text: "$2$", isCorrect: false },
+                    { text: "$\\frac{1}{2}$", isCorrect: false },
+                    { text: "$0$", isCorrect: false }
+                ],
+                explanation: "1. Bagi seluruh suku dengan $x$ (dengan mengingat $x = \\sqrt{x^2}$ untuk $x > 0$):\n$$\\lim_{x \\to \\infty} \\frac{\\sqrt{16 + \\frac{5}{x}} - 2}{2 + \\frac{1}{x}}$$\n2. Saat $x \\to \\infty$, suku $\\frac{5}{x} \\to 0$ dan $\\frac{1}{x} \\to 0$:\n$$= \\frac{\\sqrt{16} - 2}{2} = \\frac{4 - 2}{2} = \\frac{2}{2} = 1$$"
+            },
+            {
+                id: 17,
+                category: "tak-hingga",
+                categoryLabel: "Limit Tak Hingga - Pemisalan Trigonometri",
+                question: "Hitunglah nilai limit berikut:\n$$\\lim_{x \\to \\infty} x \\cdot \\tan\\left(\\frac{2}{x}\\right)$$",
+                options: [
+                    { text: "$2$", isCorrect: true },
+                    { text: "$1$", isCorrect: false },
+                    { text: "$0$", isCorrect: false },
+                    { text: "$\\frac{1}{2}$", isCorrect: false }
+                ],
+                explanation: "1. Gunakan pemisalan $y = \\frac{1}{x} \\implies x = \\frac{1}{y}$. Saat $x \\to \\infty$, $y \\to 0$.\n2. Substitusikan variabel $y$ ke dalam limit:\n$$\\lim_{y \\to 0} \\frac{1}{y} \\cdot \\tan(2y) = \\lim_{y \\to 0} \\frac{\\tan(2y)}{y} = 2$$"
+            },
+            {
+                id: 18,
+                category: "tak-hingga",
+                categoryLabel: "Limit Tak Hingga - Identitas Sinus Ganda",
+                question: "Hitunglah nilai limit berikut:\n$$\\lim_{x \\to \\infty} 2x \\cdot \\sin\\left(\\frac{1}{x}\\right) \\cos\\left(\\frac{1}{x}\\right)$$",
+                options: [
+                    { text: "$2$", isCorrect: true },
+                    { text: "$1$", isCorrect: false },
+                    { text: "$0$", isCorrect: false },
+                    { text: "$\\frac{1}{2}$", isCorrect: false }
+                ],
+                explanation: "1. Ingat identitas trigonometri $2 \\sin \\theta \\cos \\theta = \\sin(2\\theta)$.\n2. Maka $2x \\cdot \\sin\\left(\\frac{1}{x}\\right) \\cos\\left(\\frac{1}{x}\\right) = x \\cdot \\sin\\left(\\frac{2}{x}\\right)$.\n3. Misalkan $y = \\frac{1}{x} \\implies y \\to 0$:\n$$\\lim_{y \\to 0} \\frac{\\sin(2y)}{y} = 2$$"
+            },
+            {
+                id: 19,
+                category: "tak-hingga",
+                categoryLabel: "Limit Tak Hingga - Pangkat Tiga Pembilang & Penyebut",
+                question: "Hitunglah nilai limit berikut:\n$$\\lim_{x \\to \\infty} \\frac{(2x - 1)^3}{(x + 2)(2x^2 + 1)}$$",
+                options: [
+                    { text: "$4$", isCorrect: true },
+                    { text: "$8$", isCorrect: false },
+                    { text: "$2$", isCorrect: false },
+                    { text: "$1$", isCorrect: false }
+                ],
+                explanation: "1. Koefisien suku pangkat tertinggi pembilang $(2x)^3 = 8x^3$.\n2. Koefisien suku pangkat tertinggi penyebut $x \\cdot 2x^2 = 2x^3$.\n3. Karena sama-sama berderajat 3, nilai limit adalah rasio koefisien tertinggi:\n$$L = \\frac{8}{2} = 4$$"
+            },
+            {
+                id: 20,
+                category: "tak-hingga",
+                categoryLabel: "Limit Tak Hingga - Tiga Suku Akar",
+                question: "Hitunglah nilai limit berikut:\n$$\\lim_{x \\to \\infty} \\left( \\sqrt{x^2 + 2x} - 2\\sqrt{x^2 + x} + \\sqrt{x^2 - 4x} \\right)$$",
+                options: [
+                    { text: "$-2$", isCorrect: true },
+                    { text: "$-1$", isCorrect: false },
+                    { text: "$0$", isCorrect: false },
+                    { text: "$2$", isCorrect: false }
+                ],
+                explanation: "1. Pecah $-2\\sqrt{x^2+x}$ menjadi dua pasang selisih akar:\n$$\\left(\\sqrt{x^2+2x} - \\sqrt{x^2+x}\\right) + \\left(\\sqrt{x^2-4x} - \\sqrt{x^2+x}\\right)$$\n2. Hitung masing-masing pasang dengan rumus $\\frac{b-q}{2\\sqrt{a}}$:\n- Pasangan 1: $\\frac{2 - 1}{2\\sqrt{1}} = \\frac{1}{2}$\n- Pasangan 2: $\\frac{-4 - 1}{2\\sqrt{1}} = -\\frac{5}{2}$\n3. Total nilai limit = $\\frac{1}{2} - \\frac{5}{2} = -\\frac{4}{2} = -2$."
+            },
+
+            // --- LIMIT TRIGONOMETRI (10 SOAL) ---
+            {
+                id: 21,
+                category: "trigonometri",
+                categoryLabel: "Limit Trigonometri - Penjumlahan Sifat Dasar",
+                question: "Hitunglah nilai limit berikut:\n$$\\lim_{x \\to 0} \\frac{\\sin 4x + \\tan 2x}{3x}$$",
+                options: [
+                    { text: "$2$", isCorrect: true },
+                    { text: "$\\frac{4}{3}$", isCorrect: false },
+                    { text: "$\\frac{2}{3}$", isCorrect: false },
+                    { text: "$6$", isCorrect: false }
+                ],
+                explanation: "1. Pecah pecahan menjadi dua bagian terpisah:\n$$\\lim_{x \\to 0} \\frac{\\sin 4x}{3x} + \\lim_{x \\to 0} \\frac{\\tan 2x}{3x}$$\n2. Gunakan sifat dasar limit trigonometri $\\lim_{x \\to 0} \\frac{\\sin ax}{bx} = \\frac{a}{b}$:\n$$= \\frac{4}{3} + \\frac{2}{3} = \\frac{6}{3} = 2$$"
+            },
+            {
+                id: 22,
+                category: "trigonometri",
+                categoryLabel: "Limit Trigonometri - Identitas $1 - \\cos ax$",
+                question: "Hitunglah nilai limit berikut:\n$$\\lim_{x \\to 0} \\frac{1 - \\cos 4x}{x \\sin 2x}$$",
+                options: [
+                    { text: "$4$", isCorrect: true },
+                    { text: "$2$", isCorrect: false },
+                    { text: "$8$", isCorrect: false },
+                    { text: "$1$", isCorrect: false }
+                ],
+                explanation: "1. Ubah $1 - \\cos 4x = 2 \\sin^2(2x)$.\n2. Substitusi ke dalam limit:\n$$\\lim_{x \\to 0} \\frac{2 \\sin(2x) \\sin(2x)}{x \\sin 2x} = \\lim_{x \\to 0} \\frac{2 \\sin 2x}{x}$$\n3. Terapkan sifat dasar:\n$$= 2 \\cdot 2 = 4$$"
+            },
+            {
+                id: 23,
+                category: "trigonometri",
+                categoryLabel: "Limit Trigonometri - Perkalian Varian",
+                question: "Hitunglah nilai limit berikut:\n$$\\lim_{x \\to 0} \\frac{x \\cdot \\tan 3x}{1 - \\cos 2x}$$",
+                options: [
+                    { text: "$\\frac{3}{2}$", isCorrect: true },
+                    { text: "$3$", isCorrect: false },
+                    { text: "$\\frac{1}{2}$", isCorrect: false },
+                    { text: "$\\frac{2}{3}$", isCorrect: false }
+                ],
+                explanation: "1. Ubah penyebut $1 - \\cos 2x = 2 \\sin^2 x$.\n2. Susun ulang limit:\n$$\\lim_{x \\to 0} \\frac{x \\cdot \\tan 3x}{2 \\sin x \\cdot \\sin x} = \\frac{1}{2} \\cdot \\lim_{x \\to 0} \\left( \\frac{x}{\\sin x} \\cdot \\frac{\\tan 3x}{\\sin x} \\right)$$\n3. Hitung hasilnya:\n$$= \\frac{1}{2} \\cdot 1 \\cdot 3 = \\frac{3}{2}$$"
+            },
+            {
+                id: 24,
+                category: "trigonometri",
+                categoryLabel: "Limit Trigonometri - Selisih Cosinus",
+                question: "Hitunglah nilai limit berikut:\n$$\\lim_{x \\to 0} \\frac{\\cos 3x - \\cos 5x}{x^2}$$",
+                options: [
+                    { text: "$8$", isCorrect: true },
+                    { text: "$4$", isCorrect: false },
+                    { text: "$-8$", isCorrect: false },
+                    { text: "$16$", isCorrect: false }
+                ],
+                explanation: "1. Gunakan identitas $\\cos A - \\cos B = -2 \\sin\\left(\\frac{A+B}{2}\\right) \\sin\\left(\\frac{A-B}{2}\\right)$:\n$$\\cos 3x - \\cos 5x = -2 \\sin(4x) \\sin(-x) = 2 \\sin(4x) \\sin x$$\n2. Masukkan ke dalam limit:\n$$\\lim_{x \\to 0} \\frac{2 \\sin(4x) \\sin x}{x \\cdot x} = 2 \\cdot 4 \\cdot 1 = 8$$"
+            },
+            {
+                id: 25,
+                category: "trigonometri",
+                categoryLabel: "Limit Trigonometri - Sudut Bukan Nol ($x \\to \\pi/4$)",
+                question: "Hitunglah nilai limit berikut:\n$$\\lim_{x \\to \\frac{\\pi}{4}} \\frac{\\cos 2x}{\\cos x - \\sin x}$$",
+                options: [
+                    { text: "$\\sqrt{2}$", isCorrect: true },
+                    { text: "$\\frac{1}{2}\\sqrt{2}$", isCorrect: false },
+                    { text: "$2$", isCorrect: false },
+                    { text: "$0$", isCorrect: false }
+                ],
+                explanation: "1. Gunakan identitas sudut ganda $\\cos 2x = \\cos^2 x - \\sin^2 x = (\\cos x - \\sin x)(\\cos x + \\sin x)$.\n2. Sederhanakan limit:\n$$\\lim_{x \\to \\frac{\\pi}{4}} \\frac{(\\cos x - \\sin x)(\\cos x + \\sin x)}{\\cos x - \\sin x} = \\lim_{x \\to \\frac{\\pi}{4}} (\\cos x + \\sin x)$$\n3. Substitusi $x = \\frac{\\pi}{4}$:\n$$= \\cos\\left(\\frac{\\pi}{4}\\right) + \\sin\\left(\\frac{\\pi}{4}\\right) = \\frac{1}{2}\\sqrt{2} + \\frac{1}{2}\\sqrt{2} = \\sqrt{2}$$"
+            },
+            {
+                id: 26,
+                category: "trigonometri",
+                categoryLabel: "Limit Trigonometri - Bentuk $\\tan x - \\sin x$",
+                question: "Hitunglah nilai limit berikut:\n$$\\lim_{x \\to 0} \\frac{\\tan x - \\sin x}{x^3}$$",
+                options: [
+                    { text: "$\\frac{1}{2}$", isCorrect: true },
+                    { text: "$\\frac{1}{4}$", isCorrect: false },
+                    { text: "$1$", isCorrect: false },
+                    { text: "$2$", isCorrect: false }
+                ],
+                explanation: "1. Faktorkan pembilang: $\\tan x - \\sin x = \\tan x (1 - \\cos x)$.\n2. Ubah $1 - \\cos x = 2 \\sin^2\\left(\\frac{x}{2}\\right)$:\n$$\\lim_{x \\to 0} \\frac{\\tan x \\cdot 2 \\sin^2\\left(\\frac{x}{2}\\right)}{x \\cdot x^2} = \\lim_{x \\to 0} \\frac{\\tan x}{x} \\cdot 2 \\left( \\frac{\\sin(x/2)}{x} \\right)^2$$\n3. Hitung nilai limit:\n$$= 1 \\cdot 2 \\cdot \\left(\\frac{1}{2}\\right)^2 = 2 \\cdot \\frac{1}{4} = \\frac{1}{2}$$"
+            },
+            {
+                id: 27,
+                category: "trigonometri",
+                categoryLabel: "Limit Trigonometri - Mendekati Titik $x \\to 2$",
+                question: "Hitunglah nilai limit berikut:\n$$\\lim_{x \\to 2} \\frac{\\sin(x - 2)}{x^2 - 4}$$",
+                options: [
+                    { text: "$\\frac{1}{4}$", isCorrect: true },
+                    { text: "$\\frac{1}{2}$", isCorrect: false },
+                    { text: "$1$", isCorrect: false },
+                    { text: "$0$", isCorrect: false }
+                ],
+                explanation: "1. Faktorkan penyebut $x^2 - 4 = (x - 2)(x + 2)$.\n2. Pisahkan suku limit:\n$$\\lim_{x \\to 2} \\left( \\frac{\\sin(x - 2)}{x - 2} \\cdot \\frac{1}{x + 2} \\right)$$\n3. Karena $\\lim_{x \\to 2} \\frac{\\sin(x - 2)}{x - 2} = 1$, maka:\n$$= 1 \\cdot \\frac{1}{2 + 2} = \\frac{1}{4}$$"
+            },
+            {
+                id: 28,
+                category: "trigonometri",
+                categoryLabel: "Limit Trigonometri - Identitas Pythagoras $1 - \\cos^2 ax$",
+                question: "Hitunglah nilai limit berikut:\n$$\\lim_{x \\to 0} \\frac{1 - \\cos^2 3x}{x \\cdot \\tan 2x}$$",
+                options: [
+                    { text: "$\\frac{9}{2}$", isCorrect: true },
+                    { text: "$\\frac{3}{2}$", isCorrect: false },
+                    { text: "$\\frac{9}{4}$", isCorrect: false },
+                    { text: "$3$", isCorrect: false }
+                ],
+                explanation: "1. Menggunakan identitas Pythagoras $1 - \\cos^2 3x = \\sin^2 3x$.\n2. Jabarkan ke dalam limit:\n$$\\lim_{x \\to 0} \\frac{\\sin 3x \\cdot \\sin 3x}{x \\cdot \\tan 2x} = \\lim_{x \\to 0} \\left( \\frac{\\sin 3x}{x} \\cdot \\frac{\\sin 3x}{\\tan 2x} \\right)$$\n3. Terapkan sifat koefisien:\n$$= 3 \\cdot \\frac{3}{2} = \\frac{9}{2}$$"
+            },
+            {
+                id: 29,
+                category: "trigonometri",
+                categoryLabel: "Limit Trigonometri - Kombinasi Aljabar Kuadrat",
+                question: "Hitunglah nilai limit berikut:\n$$\\lim_{x \\to 1} \\frac{(x^2 - 1) \\cdot \\tan(x - 1)}{\\sin^2(x - 1)}$$",
+                options: [
+                    { text: "$2$", isCorrect: true },
+                    { text: "$1$", isCorrect: false },
+                    { text: "$0$", isCorrect: false },
+                    { text: "$4$", isCorrect: false }
+                ],
+                explanation: "1. Uraikan $x^2 - 1 = (x - 1)(x + 1)$.\n2. Susun pecahan limit:\n$$\\lim_{x \\to 1} (x + 1) \\cdot \\frac{x - 1}{\\sin(x - 1)} \\cdot \\frac{\\tan(x - 1)}{\\sin(x - 1)}$$\n3. Substitusi $x = 1$:\n$$= (1 + 1) \\cdot 1 \\cdot 1 = 2$$"
+            },
+            {
+                id: 30,
+                category: "trigonometri",
+                categoryLabel: "Limit Trigonometri - Campuran Sekawan Akar & Sinus",
+                question: "Hitunglah nilai limit berikut:\n$$\\lim_{x \\to 0} \\frac{\\sin 6x}{\\sqrt{x + 4} - 2}$$",
+                options: [
+                    { text: "$24$", isCorrect: true },
+                    { text: "$12$", isCorrect: false },
+                    { text: "$6$", isCorrect: false },
+                    { text: "$18$", isCorrect: false }
+                ],
+                explanation: "1. Kalikan dengan sekawan penyebut $(\\sqrt{x+4} + 2)$:\n$$\\lim_{x \\to 0} \\frac{\\sin 6x (\\sqrt{x+4} + 2)}{(x+4) - 4} = \\lim_{x \\to 0} \\frac{\\sin 6x (\\sqrt{x+4} + 2)}{x}$$\n2. Pisahkan limit trigonometri dasar $\\lim_{x \\to 0} \\frac{\\sin 6x}{x} = 6$:\n$$= 6 \\cdot (\\sqrt{0+4} + 2) = 6 \\cdot (2 + 2) = 6 \\cdot 4 = 24$$"
+            }
+        ];
+
+        // State Management
+        let userAnswers = {};
+        let currentFilter = 'all';
+
+        // Render Questions
+        function renderQuestions() {
+            const container = document.getElementById('quizContainer');
+            container.innerHTML = '';
+
+            const filteredData = quizData.filter(item => currentFilter === 'all' || item.category === currentFilter);
+
+            filteredData.forEach((item, index) => {
+                const isAnswered = userAnswers.hasOwnProperty(item.id);
+                const selectedOptionIdx = userAnswers[item.id];
+
+                const card = document.createElement('div');
+                card.className = `bg-white dark:bg-slate-800 rounded-2xl border border-slate-200 dark:border-slate-700/60 p-5 shadow-sm space-y-4 transition-all duration-200`;
+                
+                // Header card
+                let headerBadgeClass = "bg-brand-100 dark:bg-brand-950 text-brand-700 dark:text-brand-300";
+                if (item.category === 'tak-hingga') headerBadgeClass = "bg-amber-100 dark:bg-amber-950 text-amber-700 dark:text-amber-300";
+                if (item.category === 'trigonometri') headerBadgeClass = "bg-indigo-100 dark:bg-indigo-950 text-indigo-700 dark:text-indigo-300";
+
+                card.innerHTML = `
+                    <div class="flex items-center justify-between flex-wrap gap-2">
+                        <span class="text-xs font-bold px-2.5 py-1 rounded-md ${headerBadgeClass}">
+                            ${item.categoryLabel}
+                        </span>
+                        <span class="text-xs text-slate-400 font-mono">Soal #${item.id} dari 30</span>
+                    </div>
+
+                    <div class="text-sm sm:text-base font-semibold text-slate-900 dark:text-white leading-relaxed">
+                        ${item.question.replace(/\n/g, '<br>')}
+                    </div>
+
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-2.5 pt-2">
+                        ${item.options.map((opt, optIdx) => {
+                            let btnStyle = "bg-slate-50 dark:bg-slate-900/60 border-slate-200 dark:border-slate-700 text-slate-700 dark:text-slate-200 hover:border-brand-500 hover:bg-brand-50 dark:hover:bg-brand-900/30";
+                            let iconMark = `<span class="w-5 h-5 rounded-full border border-slate-300 dark:border-slate-600 flex items-center justify-center text-[10px] font-bold mr-2 text-slate-400">${String.fromCharCode(65 + optIdx)}</span>`;
+
+                            if (isAnswered) {
+                                if (opt.isCorrect) {
+                                    btnStyle = "bg-emerald-50 dark:bg-emerald-950/60 border-emerald-500 text-emerald-800 dark:text-emerald-300 font-bold ring-2 ring-emerald-500/20";
+                                    iconMark = `<i class="fa-solid fa-circle-check text-emerald-500 mr-2 text-sm"></i>`;
+                                } else if (selectedOptionIdx === optIdx) {
+                                    btnStyle = "bg-rose-50 dark:bg-rose-950/60 border-rose-500 text-rose-800 dark:text-rose-300 font-bold ring-2 ring-rose-500/20";
+                                    iconMark = `<i class="fa-solid fa-circle-xmark text-rose-500 mr-2 text-sm"></i>`;
+                                } else {
+                                    btnStyle = "bg-slate-50/50 dark:bg-slate-900/30 border-slate-200 dark:border-slate-800 text-slate-400 dark:text-slate-500 opacity-60 cursor-not-allowed";
+                                }
+                            }
+
+                            return `
+                                <button onclick="selectOption(${item.id}, ${optIdx})" ${isAnswered ? 'disabled' : ''} 
+                                        class="p-3 text-xs sm:text-sm text-left rounded-xl border transition-all duration-150 flex items-center justify-between ${btnStyle}">
+                                    <div class="flex items-center">
+                                        ${iconMark}
+                                        <span>${opt.text}</span>
+                                    </div>
+                                </button>
+                            `;
+                        }).join('')}
+                    </div>
+
+                    ${isAnswered ? `
+                        <div class="pt-3 border-t border-slate-100 dark:border-slate-700/60 space-y-2">
+                            <button onclick="toggleExplanation(${item.id})" class="text-xs font-bold text-brand-600 dark:text-brand-400 hover:underline flex items-center space-x-1">
+                                <i class="fa-solid fa-lightbulb text-amber-500"></i>
+                                <span>${userAnswers[item.id] === item.options.findIndex(o => o.isCorrect) ? 'Jawaban Benar! Lihat Pembahasan' : 'Jawaban Kurang Tepat - Lihat Pembahasan'}</span>
+                            </button>
+                            <div id="explanation-${item.id}" class="p-3.5 bg-slate-50 dark:bg-slate-900/80 rounded-xl text-xs space-y-1.5 font-mono text-slate-700 dark:text-slate-300 border border-slate-200 dark:border-slate-800 leading-relaxed">
+                                <span class="font-bold text-brand-600 dark:text-brand-400 uppercase tracking-wide block mb-1">Langkah Pembahasan:</span>
+                                ${item.explanation.replace(/\n/g, '<br>')}
+                            </div>
+                        </div>
+                    ` : ''}
+                `;
+
+                container.appendChild(card);
+            });
+
+            // Re-render KaTeX math formulas
+            if (window.renderMathInElement) {
+                renderMathInElement(container, {
+                    delimiters: [
+                        {left: '$$', right: '$$', display: true},
+                        {left: '$', right: '$', display: false}
+                    ],
+                    throwOnError: false
+                });
+            }
+        }
+
+        // Handle Option Select
+        function selectOption(questionId, optionIdx) {
+            userAnswers[questionId] = optionIdx;
+            updateStats();
+            renderQuestions();
+        }
+
+        // Toggle Explanation Visibility
+        function toggleExplanation(questionId) {
+            const expEl = document.getElementById(`explanation-${questionId}`);
+            if (expEl) {
+                expEl.classList.toggle('hidden');
+            }
+        }
+
+        // Filter Category
+        function filterCategory(cat) {
+            currentFilter = cat;
+            document.querySelectorAll('.filter-btn').forEach(btn => {
+                btn.className = "filter-btn bg-slate-200 dark:bg-slate-800 text-slate-700 dark:text-slate-300 px-3.5 py-1.5 rounded-lg text-xs font-bold transition";
+            });
+            
+            const activeBtn = document.getElementById(`filter-${cat}`);
+            if (activeBtn) {
+                activeBtn.className = "filter-btn bg-brand-600 text-white px-3.5 py-1.5 rounded-lg text-xs font-bold transition shadow-sm";
+            }
+
+            renderQuestions();
+        }
+
+        // Update Score Stats
+        function updateStats() {
+            const answeredCount = Object.keys(userAnswers).length;
+            let correctCount = 0;
+
+            quizData.forEach(q => {
+                if (userAnswers.hasOwnProperty(q.id)) {
+                    const selectedIdx = userAnswers[q.id];
+                    if (q.options[selectedIdx] && q.options[selectedIdx].isCorrect) {
+                        correctCount++;
+                    }
+                }
+            });
+
+            const wrongCount = answeredCount - correctCount;
+            const accuracy = answeredCount > 0 ? Math.round((correctCount / answeredCount) * 100) : 0;
+
+            document.getElementById('scoreOverview').textContent = `${answeredCount} dari 30 Soal Dijawab`;
+            document.getElementById('statCorrect').textContent = correctCount;
+            document.getElementById('statWrong').textContent = wrongCount;
+            document.getElementById('statAccuracy').textContent = `${accuracy}%`;
+        }
+
+        // Reset Quiz
+        function resetQuiz() {
+            if (confirm("Apakah Anda yakin ingin mengulang semua latihan dan menghapus jawaban?")) {
+                userAnswers = {};
+                updateStats();
+                renderQuestions();
+            }
+        }
+
+        // Dark Mode Toggle
+        function toggleDarkMode() {
+            const html = document.documentElement;
+            const icon = document.getElementById('themeIcon');
+            if (html.classList.contains('dark')) {
+                html.classList.remove('dark');
+                icon.className = 'fa-solid fa-moon text-lg';
+            } else {
+                html.classList.add('dark');
+                icon.className = 'fa-solid fa-sun text-lg text-amber-400';
+            }
+        }
+
+        // Initialize on Load
+        window.addEventListener('DOMContentLoaded', () => {
+            renderQuestions();
+        });
+    </script>
+</body>
+</html>
